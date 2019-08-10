@@ -198,3 +198,37 @@ export default class App extends Component {
         _calculateFormula: this.state._calculateFormula + '+' + `Math.floor(Math.random() * ${number}) + 1` + '',
       })
     }
+    else {
+      this.setState({
+        _calculateFormula: `Math.floor(Math.random() * ${number}) + 1` + '',
+      })
+    }
+  }
+
+  // render
+  render() {
+    return (
+      <Base color='black' >
+        <Keyboard>
+            <DiceButton number={10} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+            <DiceButton number={12} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+            <DiceButton number={20} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+            <DiceButton number={100} fontSize={40} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+        </Keyboard>
+        <Keyboard>
+            <DiceButton number={4} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+            <DiceButton number={6} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+            <DiceButton number={8} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+            <DiceButton number={'+'} fontSize={50}/>
+        </Keyboard>
+        <CommandLineDisplay formula={this.state._outputFormula} />
+        <RollButton onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+        <Display>
+          <DisplayText output={this.state._output} />
+          <Text>{this.state._outputDescription}</Text>
+          <ResetButton onBtnPress={this._handleEvent} />
+        </Display>
+      </Base>
+    );
+  }
+}
