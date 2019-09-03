@@ -34,7 +34,7 @@ const initialDiceArr = [
   [20, 0, ''],
   [100, 0, '']
 ];
-const initialBonus = 0;
+//const initialBonus = 0;
 
 // Container class
 export default class App extends Component {
@@ -129,29 +129,13 @@ export default class App extends Component {
       _outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
-      _diceArr: [
-        [4, 0, ''],
-        [6, 0, ''],
-        [8, 0, ''],
-        [10, 0, ''],
-        [12, 0, ''],
-        [20, 0, ''],
-        [100, 0, '']
-      ],
+      _diceArr: initialDiceArr.map(Arr => Arr),
     });
   }
 
   //Function concatinate output formula
   _concatToOutput = (number) => {
-    let fArr = [
-      [4, 0, ''],
-      [6, 0, ''],
-      [8, 0, ''],
-      [10, 0, ''],
-      [12, 0, ''],
-      [20, 0, ''],
-      [100, 0, ''],
-    ];
+    let fArr = initialDiceArr.map(Arr => Arr);
     let counter = 0;
     let outputFormula = '';
     for (let i = 0; i < this.state._diceArr.length; i++) {
