@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /***************************************************************
  * FileName: App.js
  * Descripsion: ROLLS
@@ -7,12 +8,9 @@
 ***************************************************************/
 
 //Packages
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  Alert,
-  AppRegistry,
   Text,
-  View
 } from 'react-native';
 //Custom Components
 import Base from './components/Base.js';
@@ -28,13 +26,13 @@ import ResetButton from './components/ResetButton.js';
 const initialOutput = '0';
 const initialFormula = '';
 const initialDiceArr = [
-  [4,0,''],
-  [6,0,''],
-  [8,0,''],
-  [10,0,''],
-  [12,0,''],
-  [20,0,''],
-  [100,0,'']
+  [4, 0, ''],
+  [6, 0, ''],
+  [8, 0, ''],
+  [10, 0, ''],
+  [12, 0, ''],
+  [20, 0, ''],
+  [100, 0, '']
 ];
 const initialBonus = 0;
 
@@ -48,26 +46,26 @@ export default class App extends Component {
       _outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
-      _diceArr: []
-    }
+      _diceArr: [],
+    };
     this._handleEvent = this._handleEvent.bind(this);
   }
 
   //Function handles action
   _handleEvent = (value) => {
-    if(isNaN(value[0]) && value[0]!='Roll' && value[0]!='Reset') {
+    if (isNaN(value[0]) && value[0] !== 'Roll' && value[0] !== 'Reset') {
       this.setState({
         _output: `invalid ${value[0]}`,
       });
     }
-    else{
-      switch(value[0]) {
+    else {
+      switch (value[0]) {
         case 'Roll':
-          if(value[1] == 1){
+          if (value[1] === 1) {
             this._rollDice();
             break;
           }
-          else if(value[1] == 2){
+          else if (value[1] === 2) {
             this._clear();
             break;
           }
@@ -97,9 +95,8 @@ export default class App extends Component {
     let dEval = 0;
     let dEvalCritical = 0;
     let dEvalFumble = 0;
-    for (let i = 0;i < this.state._diceArr.length;i++) {
-      counter = 0;
-      for (let j = 0;j < this.state._diceArr[i][1];j++) {
+    for (let i = 0; i < this.state._diceArr.length; i++) {
+      for (let j = 0; j < this.state._diceArr[i][1]; j++) {
         diceResult = Math.floor(Math.random() * this.state._diceArr[i][0]) + 1;
         dEval = dEval + diceResult;
         dEvalCritical = dEvalCritical + this.state._diceArr[i][0];
@@ -122,9 +119,9 @@ export default class App extends Component {
       _output: dEval,
       _outputFormula: results,
       //      _outputDescription: results
-    })
+    });
   }
-    
+
   //Function Clear
   _clear = () => {
     this.setState({
@@ -133,48 +130,48 @@ export default class App extends Component {
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
       _diceArr: [
-        [4,0,''],
-        [6,0,''],
-        [8,0,''],
-        [10,0,''],
-        [12,0,''],
-        [20,0,''],
-        [100,0,'']
+        [4, 0, ''],
+        [6, 0, ''],
+        [8, 0, ''],
+        [10, 0, ''],
+        [12, 0, ''],
+        [20, 0, ''],
+        [100, 0, '']
       ],
-    })
+    });
   }
 
   //Function concatinate output formula
   _concatToOutput = (number) => {
     let fArr = [
-      [4,0,''],
-      [6,0,''],
-      [8,0,''],
-      [10,0,''],
-      [12,0,''],
-      [20,0,''],
-      [100,0,'']
+      [4, 0, ''],
+      [6, 0, ''],
+      [8, 0, ''],
+      [10, 0, ''],
+      [12, 0, ''],
+      [20, 0, ''],
+      [100, 0, ''],
     ];
     let counter = 0;
     let outputFormula = '';
-    for (let i = 0;i < this.state._diceArr.length;i++) {
-      for (let j = 0;j < this.state._diceArr[i].length;j++) {
+    for (let i = 0; i < this.state._diceArr.length; i++) {
+      for (let j = 0; j < this.state._diceArr[i].length; j++) {
         fArr[i][j] = this.state._diceArr[i][j];
       }
     }
     //update formula array
-    for (let i = 0;i < fArr.length;i++) {
-      if (number == fArr[i][0]) {
+    for (let i = 0; i < fArr.length; i++) {
+      if (number === fArr[i][0]) {
         fArr[i][1] = fArr[i][1] + 1;
         fArr[i][2] = `${fArr[i][1]}d${fArr[i][0]}`;
-      } 
+      }
     }
-    
+
     //update output formula
     counter = 0;
     outputFormula = '';
-    for (let i = 0;i < fArr.length;i++) {
-      if (fArr[i][1] != 0) {
+    for (let i = 0; i < fArr.length; i++) {
+      if (fArr[i][1] !== 0) {
         if (counter > 0) {
           outputFormula = outputFormula + ' + ';
         }
@@ -188,38 +185,38 @@ export default class App extends Component {
     this.setState({
       _outputFormula: `${outputFormula}`,
       _diceArr: fArr.concat(),
-    })
+    });
   }
 
   //Function concatinate calculate formula
   _concatToEvaluate = (number) => {
-    if(this.state._calculateFormula !== initialFormula){
+    if (this.state._calculateFormula !== initialFormula) {
       this.setState({
         _calculateFormula: this.state._calculateFormula + '+' + `Math.floor(Math.random() * ${number}) + 1` + '',
-      })
+      });
     }
     else {
       this.setState({
         _calculateFormula: `Math.floor(Math.random() * ${number}) + 1` + '',
-      })
+      });
     }
   }
 
   // render
   render() {
     return (
-      <Base color='black' >
+      <Base color="black" >
         <Keyboard>
-            <DiceButton number={10} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
-            <DiceButton number={12} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
-            <DiceButton number={20} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
-            <DiceButton number={100} fontSize={40} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={10} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={12} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={20} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={100} fontSize={40} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
         </Keyboard>
         <Keyboard>
-            <DiceButton number={4} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
-            <DiceButton number={6} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
-            <DiceButton number={8} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
-            <DiceButton number={'+'} fontSize={50}/>
+          <DiceButton number={4} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={6} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={8} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+          <DiceButton number={'+'} fontSize={50} />
         </Keyboard>
         <CommandLineDisplay formula={this.state._outputFormula} />
         <RollButton onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
