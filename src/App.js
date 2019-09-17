@@ -32,7 +32,7 @@ const initialDiceArr = [
   [10, 0, ''],
   [12, 0, ''],
   [20, 0, ''],
-  [100, 0, '']
+  [100, 0, ''],
 ];
 //const initialBonus = 0;
 
