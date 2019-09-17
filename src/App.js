@@ -125,18 +125,20 @@ export default class App extends Component {
 
   //Function Clear
   _clear = () => {
+    const resetArr = initialDiceArr.map(row => row.map(column => column));
+
     this.setState({
       _output: initialOutput,
       //_outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
-      _diceArr: initialDiceArr.map(Arr => Arr),
-    });
+      _diceArr: resetArr,
+     });
   }
 
   //Function concatinate output formula
   _concatToOutput = (number) => {
-    let fArr = initialDiceArr.map(Arr => Arr);
+    let fArr = initialDiceArr.map(row => row.map(column => column));
     let counter = 0;
     let outputFormula = '';
     for (let i = 0; i < this.state._diceArr.length; i++) {
