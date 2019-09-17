@@ -12,6 +12,7 @@ import React, { Component } from 'react';
 import {
   Text,
 } from 'react-native';
+
 //Custom Components
 import Base from './components/Base.js';
 import Keyboard from './components/Keyboard.js';
@@ -36,14 +37,14 @@ const initialDiceArr = [
 ];
 //const initialBonus = 0;
 
-// Container class
+//Container class
 export default class App extends Component {
   // Initializations
   constructor(props) {
     super(props);
     this.state = {
       _output: initialOutput,
-      _outputDescription: initialFormula,
+      //_outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
       _diceArr: [],
@@ -126,7 +127,7 @@ export default class App extends Component {
   _clear = () => {
     this.setState({
       _output: initialOutput,
-      _outputDescription: initialFormula,
+      //_outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
       _diceArr: initialDiceArr.map(Arr => Arr),
@@ -206,7 +207,6 @@ export default class App extends Component {
         <RollButton onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
         <Display>
           <DisplayText output={this.state._output} />
-          <Text>{this.state._outputDescription}</Text>
           <ResetButton onBtnPress={this._handleEvent} />
         </Display>
       </Base>
