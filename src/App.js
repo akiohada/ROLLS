@@ -35,7 +35,6 @@ const initialDiceArr = [
   [20, 0, ''],
   [100, 0, ''],
 ];
-//const initialBonus = 0;
 
 //Container class
 export default class App extends Component {
@@ -44,7 +43,6 @@ export default class App extends Component {
     super(props);
     this.state = {
       _output: initialOutput,
-      //_outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
       _diceArr: [],
@@ -119,7 +117,6 @@ export default class App extends Component {
     this.setState({
       _output: dEval,
       _outputFormula: results,
-      //      _outputDescription: results
     });
   }
 
@@ -129,7 +126,6 @@ export default class App extends Component {
 
     this.setState({
       _output: initialOutput,
-      //_outputDescription: initialFormula,
       _outputFormula: initialFormula,
       _calculateFormula: initialFormula,
       _diceArr: resetArr,
