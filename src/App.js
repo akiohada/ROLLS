@@ -9,9 +9,7 @@
 
 //Packages
 import React, { Component } from 'react';
-import {
-  Text,
-} from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 
 //Custom Components
 import Base from './components/Base.js';
@@ -23,9 +21,10 @@ import DisplayText from './components/DisplayText.js';
 import RollButton from './components/RollButton.js';
 import ResetButton from './components/ResetButton.js';
 
-//Constants
+//Global constants
 const initialOutput = '0';
 const initialFormula = '';
+const initialRollList = [4, 6, 8, 10, 12, 20, 100];
 const initialDiceArr = [
   [4, 0, ''],
   [6, 0, ''],
@@ -38,121 +37,98 @@ const initialDiceArr = [
 
 //Container class
 export default class App extends Component {
-  // Initializations
+
+  //Variables and initializations
   constructor(props) {
     super(props);
     this.state = {
-      _output: initialOutput,
-      _outputFormula: initialFormula,
-      _calculateFormula: initialFormula,
-      _diceArr: [],
+      _output: initialOutput, //Inputted dice or Result of roll
+      _outputFormula: initialFormula, //Inputted dices or Result of each roll
+      _calculateFormula: initialFormula, //Formula for Calculate
+      _diceArr: [], //Dices, roll numbers and its string
     };
     this._handleEvent = this._handleEvent.bind(this);
   }
 
-  //Function handles action
-  _handleEvent = (value) => {
-    if (isNaN(value[0]) && value[0] !== 'Roll' && value[0] !== 'Reset') {
-      this.setState({
-        _output: `invalid ${value[0]}`,
-      });
-    }
-    else {
-      switch (value[0]) {
-        case 'Roll':
-          if (value[1] === 1) {
-            this._rollDice();
-            break;
-          }
-          else if (value[1] === 2) {
-            this._clear();
-            break;
-          }
-          else {
-            break;
-          }
-
-        case 'Reset':
-          this._clear();
-          break;
-
-        default:
-          this.setState({
-            _output: `+ d${value[0]}`,
-          });
-          this._concatToOutput(value[0]);
-          this._concatToEvaluate(value[0]);
-          break;
-      }
-    }
-  }
-
+  /******************** On push Roll or Reset ********************/
   //Function roll Dice
   _rollDice = () => {
-    let results = '';
-    let diceResult = 0;
+    //initializations
+    let rollResult = 0;
     let dEval = 0;
     let dEvalCritical = 0;
     let dEvalFumble = 0;
+    let resultString = '';
+
+    //operate
     for (let i = 0; i < this.state._diceArr.length; i++) {
       for (let j = 0; j < this.state._diceArr[i][1]; j++) {
-        diceResult = Math.floor(Math.random() * this.state._diceArr[i][0]) + 1;
-        dEval = dEval + diceResult;
+        rollResult = Math.floor(Math.random() * this.state._diceArr[i][0]) + 1;
+        dEval = dEval + rollResult;
         dEvalCritical = dEvalCritical + this.state._diceArr[i][0];
         dEvalFumble = dEvalFumble + 1;
-        if (j === 0) {
-          results = 'd' + this.state._diceArr[i][0] + '[' + diceResult + ']';
+        if (i === 0) {
+          resultString = 'd' + this.state._diceArr[i][0] + '[' + rollResult + ']';
           continue;
-        } else if (j > 0) {
-          results = results + ' + d' + this.state._diceArr[i][0] + '[' + diceResult + ']';
+        } else if (i > 0) {
+          resultString = resultString + ' + d' + this.state._diceArr[i][0] + '[' + rollResult + ']';
           continue;
         }
       }
     }
     if (dEval === dEvalCritical) {
-      results = '!!!CRITICAL!!!  ' + results;
+      resultString = '!!!CRITICAL!!!  ' + resultString;
     } else if (dEval === dEvalFumble) {
-      results = '!!!Fumble!!!  ' + results;
+      resultString = '!!!Fumble!!!  ' + resultString;
     }
     this.setState({
       _output: dEval,
-      _outputFormula: results,
+      _outputFormula: resultString,
     });
   }
 
   //Function Clear
   _clear = () => {
-    const resetArr = initialDiceArr.map(row => row.map(column => column));
-
     this.setState({
-      _output: initialOutput,
-      _outputFormula: initialFormula,
+      _rollArr: initialRollList.concat(), //???
+      _output: initialOutput, //Main display inputted dice or result of roll
+      _outputFormula: initialFormula, //Sub display inputted dice or result of each dice roll
       _calculateFormula: initialFormula,
-      _diceArr: resetArr,
+      _diceArr: initialDiceArr.concat(),
      });
   }
 
+  /******************** On Push Dice Button ********************/
+  //Function handles action
+  _handleEvent = (pushedDiceNumberSet) => {
+    this.setState({
+      _output: `+ d${pushedDiceNumberSet[0]}`,
+    });
+    this._concatToOutput(pushedDiceNumberSet[0]);
+    this._concatToEvaluate(pushedDiceNumberSet[0]);
+  }
+
   //Function concatinate output formula
-  _concatToOutput = (number) => {
+  _concatToOutput = (pushedDiceNumber) => {
+    //initialize tempolary fArr
     let fArr = initialDiceArr.map(row => row.map(column => column));
-    let counter = 0;
-    let outputFormula = '';
     for (let i = 0; i < this.state._diceArr.length; i++) {
-      for (let j = 0; j < this.state._diceArr[i].length; j++) {
-        fArr[i][j] = this.state._diceArr[i][j];
-      }
+      fArr[i][0] = this.state._diceArr[i][0]; //dice number
+      fArr[i][1] = this.state._diceArr[i][1]; //how many roll?
+      fArr[i][2] = this.state._diceArr[i][2]; //string like "3d6"
     }
-    //update formula array
+
+    //updata fArr
     for (let i = 0; i < fArr.length; i++) {
-      if (number === fArr[i][0]) {
+      if (pushedDiceNumber === fArr[i][0]) {
         fArr[i][1] = fArr[i][1] + 1;
         fArr[i][2] = `${fArr[i][1]}d${fArr[i][0]}`;
       }
     }
 
     //update output formula
-    counter = 0;
-    outputFormula = '';
+    let counter = 0;
+    let outputFormula = '';
     for (let i = 0; i < fArr.length; i++) {
       if (fArr[i][1] !== 0) {
         if (counter > 0) {
@@ -165,6 +141,8 @@ export default class App extends Component {
         continue;
       }
     }
+
+    //set state
     this.setState({
       _outputFormula: `${outputFormula}`,
       _diceArr: fArr.concat(),
@@ -172,23 +150,24 @@ export default class App extends Component {
   }
 
   //Function concatinate calculate formula
-  _concatToEvaluate = (number) => {
+  _concatToEvaluate = (pushedDiceNumber) => {
     if (this.state._calculateFormula !== initialFormula) {
       this.setState({
-        _calculateFormula: this.state._calculateFormula + '+' + `Math.floor(Math.random() * ${number}) + 1` + '',
+        _calculateFormula: this.state._calculateFormula + '+' + `Math.floor(Math.random() * ${pushedDiceNumber}) + 1` + '',
       });
     }
     else {
       this.setState({
-        _calculateFormula: `Math.floor(Math.random() * ${number}) + 1` + '',
+        _calculateFormula: `Math.floor(Math.random() * ${pushedDiceNumber}) + 1` + '',
       });
     }
   }
 
+  /******************** Render ********************/
   // render
   render() {
     return (
-      <Base color="black" >
+      <SafeAreaView style={styles.container}>
         <Keyboard>
           <DiceButton number={10} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
           <DiceButton number={12} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
@@ -201,13 +180,21 @@ export default class App extends Component {
           <DiceButton number={8} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
           <DiceButton number={'+'} fontSize={50} />
         </Keyboard>
-        <CommandLineDisplay formula={this.state._outputFormula} />
-        <RollButton onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
+        <CommandLineDisplay formula={this.state._outputFormula} diceArr={this.state._diceArr}/>
+        <RollButton onBtnPress={this._rollDice} />
         <Display>
           <DisplayText output={this.state._output} />
-          <ResetButton onBtnPress={this._handleEvent} />
+          <ResetButton onBtnPress={this._clear} />
         </Display>
-      </Base>
+      </SafeAreaView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column-reverse',
+    justifyContent: 'center',
+  },
+});
