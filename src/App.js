@@ -9,7 +9,7 @@
 
 //Packages
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 //Custom Components
 import Base from './components/Base.js';
@@ -167,7 +167,7 @@ export default class App extends Component {
   // render
   render() {
     return (
-      <SafeAreaView style={styles.container}>
+      <Base>
         <Keyboard>
           <DiceButton number={10} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
           <DiceButton number={12} fontSize={50} onBtnPress={this._handleEvent} onBtnLongPress={this._handleEvent} />
@@ -186,15 +186,7 @@ export default class App extends Component {
           <DisplayText output={this.state._output} />
           <ResetButton onBtnPress={this._clear} />
         </Display>
-      </SafeAreaView>
+      </Base>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column-reverse',
-    justifyContent: 'center',
-  },
-});
